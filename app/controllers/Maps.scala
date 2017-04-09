@@ -1,15 +1,12 @@
 package controllers
 
-import javax.inject.Inject
-
 import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller, Result}
-import services.MapsManager
+import play.api.mvc.{Action, Controller}
 
-class Maps @Inject()(mapsService: MapsManager) extends Controller {
+class Maps () extends Controller {
 
   def list = Action {
-    def books = mapsService.road
+    def books = "" //mapsService.road
     Ok(Json.toJson(books))
   }
 

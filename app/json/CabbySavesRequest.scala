@@ -1,11 +1,11 @@
 package json
 
-import model.{Cabby, Position, Unappropriated}
+import model.{Cabby, Position}
 import play.api.libs.json.Json
 
 case class CabbySavesRequest(tagCar: String, currentPosition: Position) {
 
-  def toUnappropriated: Unappropriated = Unappropriated(Cabby(tagCar), currentPosition)
+  def toCabby: Cabby = Cabby(tagCar, currentPosition)
 
 }
 

@@ -1,7 +1,6 @@
 package model
 
 import play.api.Environment
-import services.LocationNotFoundException
 
 import scala.collection.mutable.MutableList
 import scala.io.Source.fromInputStream
@@ -13,7 +12,7 @@ trait RoadMap {
 
   val roads: DriversByPosition = {
     val file = Environment.simple().resourceAsStream("cidade.txt").map(fromInputStream(_))
-    file.fold(ifEmpty = throw LocationNotFoundException())(file => {
+    file.fold(ifEmpty = ???)(file => {
       file.getLines.zipWithIndex.flatMap{ case (lineValue, line) => {
         lineValue.zipWithIndex.map{ case (columnValue, column) if(columnValue.equals(',')) => {
            (Position(line, column), MutableList.empty[Cabby])
