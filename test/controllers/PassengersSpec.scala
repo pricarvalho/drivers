@@ -15,14 +15,14 @@ class PassengersSpec extends Specification {
     "save a passenger and return" in {
 
       "'Created' to valid result" in new WithApplication {
-        val json = "{\n\t\"route\" : {\n\t\t\"originPosition\" : {\n\t\t\t\"x\": 0,\n\t    \t\"y\": 0\n\t\t},\n\t\t\"targetPosition\" : {\n\t\t\t\"x\": 14,\n\t    \t\"y\": 7\n\t\t}\n\t}\n\t\n}"
+        val json = "{\n\t\"originPosition\" : {\n\t\t\"x\": 0,\n    \t\"y\": 0\n\t},\n\t\"targetPosition\" : {\n\t\t\"x\": 14,\n    \t\"y\": 7\n\t}\n\t\n}"
         val post = route(app, FakeRequest(POST, "/passengers").withJsonBody(Json.parse(json))).get
 
         status(post) must equalTo(CREATED)
       }
 
       "'NotAcceptable' to invalid json request" in new WithApplication {
-        val json = "{\n\t\"route\" : {\n\t\t\"originPosition\" : {\n\t\t\t\"x\": 0,\n\t    \t\"y\": 0\n\t\t}\n\t}\n\t\n}"
+        val json = "{\n\t\"originPosition\" : {\n\t\t\"x\": 0,\n    \t\"y\": 0\n\t}\n}"
         val post = route(app, FakeRequest(POST, "/passengers").withJsonBody(Json.parse(json))).get
 
         status(post) must equalTo(NOT_ACCEPTABLE)
