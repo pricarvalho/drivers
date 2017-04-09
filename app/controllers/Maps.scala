@@ -4,12 +4,12 @@ import javax.inject.Inject
 
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller, Result}
-import services.MapsService
+import services.MapsManager
 
-class Maps @Inject()(mapsService: MapsService) extends Controller {
+class Maps @Inject()(mapsService: MapsManager) extends Controller {
 
   def list = Action {
-    def books = mapsService.list
+    def books = mapsService.road
     Ok(Json.toJson(books))
   }
 
