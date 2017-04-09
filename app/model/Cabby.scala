@@ -2,7 +2,7 @@ package model
 
 import play.api.libs.json.Json
 
-case class Cabby(id: Long) {
+case class Cabby(tagCar: String) {
 
 }
 

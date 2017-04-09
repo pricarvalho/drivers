@@ -14,21 +14,21 @@ class CabbiesSpec extends Specification {
 
     "save a cabby and return" in {
 
-      "'Created' status result" in new WithApplication {
-        val teste = "{\n\t\"currentLocation\" : {\n\t\t\"cabby\": {\n\t\t\t\"id\": 1234 \n\t\t},\n\t\t\"car\": {\n\t\t\t\"tag\": \"APP2017\"\t\n\t\t},\n\t\t\"position\" : {\n\t\t\t\"x\": 0,\n\t    \t\"y\": 0\n\t\t}\n\t}\n}"
-        val post = route(app, FakeRequest(POST, "/cabbies").withJsonBody(Json.parse(teste))).get
+      "'Created' to valid result" in new WithApplication {
+        val json = "{\t\"tagCar\" : \"APRIL-2017\",\n\t\"currentPosition\" : {\n\t\t\"x\": 0,\n    \t\"y\": 0\n\t}\n}"
+        val post = route(app, FakeRequest(POST, "/cabbies").withJsonBody(Json.parse(json))).get
 
         status(post) must equalTo(CREATED)
       }
 
-      "'NotAcceptable' status result to invalid json request" in new WithApplication {
-        val teste = "{\n\t\t\"cabby\": {\n\t\t\t\"id\": 1234 \n\t\t},\n\t\t\"car\": {\n\t\t\t\"tag\": \"APP2017\"\t\n\t\t},\n\t\t\"position\" : {\n\t\t\t\"x\": 0,\n\t    \t\"y\": 0\n\t\t}\n\t}"
-        val post = route(app, FakeRequest(POST, "/cabbies").withJsonBody(Json.parse(teste))).get
+      "'NotAcceptable' to invalid json request" in new WithApplication {
+        val json = "{\n\t\"currentPosition\" : {\n\t\t\"y\": 0\n\t}\n}"
+        val post = route(app, FakeRequest(POST, "/cabbies").withJsonBody(Json.parse(json))).get
 
         status(post) must equalTo(NOT_ACCEPTABLE)
       }
 
-      "'UnsupportedMediaType' status result to invalid request" in new WithApplication {
+      "'UnsupportedMediaType' to invalid request" in new WithApplication {
         val post = route(app, FakeRequest(POST, "/cabbies")).get
 
         status(post) must equalTo(UNSUPPORTED_MEDIA_TYPE)
