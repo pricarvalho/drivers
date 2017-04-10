@@ -5,9 +5,6 @@
 # Home page
 GET     /                               controllers.Application.index
 
-#Map
-GET     /maps                           controllers.Maps.list
-
 #Cabby
 POST     /cabbies                       controllers.Cabbies.post
 

@@ -1,6 +1,6 @@
 package services
 
-import fixture.RoadMap
+import fixture.RoadMapFixture
 import model.{Cabby, Passenger, Position, Route}
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
@@ -13,7 +13,7 @@ class TaxiCallerSpec extends Specification {
 
     "call a taxi driver closer with" in {
       "one empty cabby on the map" in {
-        val mapa = RoadMap.create
+        val mapa = RoadMapFixture.create
         mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), statusCode = 1))
 
         val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
@@ -24,7 +24,7 @@ class TaxiCallerSpec extends Specification {
       }
 
       "with two empty cabby on the map in the same position" in {
-        val mapa = RoadMap.create
+        val mapa = RoadMapFixture.create
         mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), statusCode = 1))
         mapa.add(Cabby(tagCar = "APRIL-2018", Position(10,2), statusCode = 1))
 
@@ -35,7 +35,7 @@ class TaxiCallerSpec extends Specification {
       }
 
       "with two empty cabby on the map in distinct positions" in {
-        val mapa = RoadMap.create
+        val mapa = RoadMapFixture.create
         val closerCabby = Cabby(tagCar = "APRIL-2017", Position(10,2), statusCode = 1)
         mapa.add(closerCabby)
         mapa.add(Cabby(tagCar = "APRIL-2018", Position(2,2), statusCode = 1))
@@ -48,7 +48,7 @@ class TaxiCallerSpec extends Specification {
       }
 
       "one empty cabby on the map in distinct positions" in {
-        val mapa = RoadMap.create
+        val mapa = RoadMapFixture.create
         val fartherCabby = Cabby(tagCar = "APRIL-2018", Position(2,2), statusCode = 1)
         mapa.add(fartherCabby)
         mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), statusCode = 2))
@@ -62,7 +62,7 @@ class TaxiCallerSpec extends Specification {
     }
 
     "returns None for call a taxi driver that not exists on the map" in {
-      val mapa = RoadMap.create
+      val mapa = RoadMapFixture.create
       val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
       val result = TaxiCaller(mapa).callFrom(passenger)
 

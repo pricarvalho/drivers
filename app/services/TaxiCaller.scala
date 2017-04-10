@@ -8,7 +8,7 @@ import scala.collection.mutable.PriorityQueue
 import scala.collection.mutable.ListBuffer
 import scala.util.Try
 
-case class TaxiCaller @Inject()(roadMap: RoadMapService) {
+case class TaxiCaller @Inject()(roadMap: RoadMap) {
 
   val queuePositions = new PriorityQueue[PriorityPosition]
   val scoringPositions = ListBuffer.empty[PriorityPosition]
@@ -20,7 +20,7 @@ case class TaxiCaller @Inject()(roadMap: RoadMapService) {
         .map(PriorityPosition(priorityPosition.counter + 1, _))
         .filterNot(scoringPositions.contains)
         .map(prioritizePosition)
-        .map(priority => roadMap.findCabbies(priority.position)).flatten
+        .map(priority => roadMap.find[Cabby](priority.position)).flatten
         .find(_.empty).fold(ifEmpty = findTaxiBy(queuePositions.dequeue()))(x => x)
     }
 
