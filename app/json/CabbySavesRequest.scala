@@ -5,7 +5,7 @@ import play.api.libs.json.Json
 
 case class CabbySavesRequest(tagCar: String, currentPosition: Position) {
 
-  def toCabby: Cabby = Cabby(tagCar, currentPosition)
+  def toCabby: Cabby = Cabby(tagCar, currentPosition, statusCode = 1)
 
 }
 
