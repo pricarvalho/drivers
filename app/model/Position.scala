@@ -29,7 +29,7 @@ object Position {
 
 case class PriorityPosition(counter: Int, position: Position) extends Ordered[PriorityPosition] {
 
-  def neighbors() = this.position.neighbors
+  def neighbors(f: Position => Boolean) = this.position.neighbors.filter(f)
 
   override def compare(other: PriorityPosition) = other.counter - this.counter
 
