@@ -2,10 +2,9 @@ package services
 
 import javax.inject.Inject
 
-import model.{Cabby, Passenger, Position, PriorityPosition}
+import model.{Cabby, Passenger, PriorityPosition}
 
-import scala.collection.mutable.PriorityQueue
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.{ListBuffer, PriorityQueue}
 import scala.util.Try
 
 case class TaxiCaller @Inject()(roadMap: RoadMap) {
@@ -20,7 +19,7 @@ case class TaxiCaller @Inject()(roadMap: RoadMap) {
         .map(PriorityPosition(priorityPosition.counter + 1, _))
         .filterNot(scoringPositions.contains)
         .map(prioritizePosition)
-        .map(priority => roadMap.find[Cabby](priority.position)).flatten
+        .map(priority => roadMap.peopleInPosition(priority.position, classOf[Cabby])).flatten
         .find(_.empty).fold(ifEmpty = findTaxiBy(queuePositions.dequeue()))(x => x)
     }
 

@@ -8,7 +8,7 @@ import scala.util.Try
 trait Maps {
 
   def unblocked(position: Position): Boolean
-  def find[A](position: Position): ListBuffer[A]
+  def peopleInPosition[T](position: Position, clazz: Class[T]): ListBuffer[T]
   def add(person: Person): Unit
   def update(person: Person, newPosition: Position): Unit
 }
@@ -23,9 +23,9 @@ case class RoadMap(roads: Array[Array[Boolean]]) extends Maps {
     Try(roads(position.x)(position.y)).getOrElse(false)
   }
 
-  override def find[A](position: Position): ListBuffer[A] = {
-    people.get(position).filter(_.nonEmpty).fold(ListBuffer.empty[A])(x => {
-      x.filter(_.isInstanceOf[A]).asInstanceOf[ListBuffer[A]]
+  override def peopleInPosition[T](position: Position, clazz: Class[T]): ListBuffer[T] = {
+    people.get(position).filter(_.nonEmpty).fold(ListBuffer.empty[T])(x => {
+      x.filter(clazz.isInstance(_)).asInstanceOf[ListBuffer[T]]
     })
   }
 
