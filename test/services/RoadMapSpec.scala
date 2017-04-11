@@ -20,7 +20,7 @@ class RoadMapSpec extends Specification {
         subject.add(Cabby(tagCar = "APRIL-2017", position, statusCode = 1))
         subject.add(Cabby(tagCar = "APRIL-2018", position, statusCode = 1))
 
-        val result = subject.listIn[Cabby](position)
+        val result = subject.listByPosition[Cabby](position)
         result.isEmpty must beFalse
         result.size must beEqualTo(2)
       }
@@ -32,11 +32,11 @@ class RoadMapSpec extends Specification {
         subject.add(Cabby(tagCar = "APRIL-2017", firstPosition, statusCode = 1))
         subject.add(Cabby(tagCar = "APRIL-2018", secondPosition, statusCode = 1))
 
-        val firstResult = subject.listIn[Cabby](firstPosition)
+        val firstResult = subject.listByPosition[Cabby](firstPosition)
         firstResult.isEmpty must beFalse
         firstResult.size must beEqualTo(1)
 
-        val secondResult = subject.listIn[Cabby](secondPosition)
+        val secondResult = subject.listByPosition[Cabby](secondPosition)
         secondResult.isEmpty must beFalse
         secondResult.size must beEqualTo(1)
       }
@@ -50,13 +50,13 @@ class RoadMapSpec extends Specification {
         val passenger = Passenger(1, Route(position, Position(14,7)))
         subject.add(passenger)
 
-        val resultForCabbies: ListBuffer[Cabby] = subject.listIn[Cabby](position)
+        val resultForCabbies: ListBuffer[Cabby] = subject.listByPosition[Cabby](position)
         resultForCabbies.isEmpty must beFalse
         resultForCabbies.size must beEqualTo(1)
         resultForCabbies.contains(cabby) must beTrue
         resultForCabbies.contains(passenger) must beFalse
 
-        val resultForPassengers: ListBuffer[Passenger] = subject.listIn[Passenger](position)
+        val resultForPassengers: ListBuffer[Passenger] = subject.listByPosition[Passenger](position)
         resultForPassengers.isEmpty must beFalse
         resultForPassengers.size must beEqualTo(1)
         resultForPassengers.contains(passenger) must beTrue

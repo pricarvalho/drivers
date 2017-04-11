@@ -17,7 +17,7 @@ case class TaxiCaller (roadMap: RoadMap) {
         .map(PriorityPosition(priorityPosition.counter + 1, _))
         .filterNot(scoringPositions.contains)
         .map(prioritizePosition(_).position)
-        .map(roadMap.listIn[Cabby](_)).flatten
+        .map(roadMap.listByPosition[Cabby]).flatten
         .find(_.empty).fold(ifEmpty = findTaxiBy(queuePositions.dequeue()))(cabby => {
         this.scoringPositions += priorityPosition
         cabby
