@@ -1,6 +1,6 @@
 package services
 
-import model.{Cabby, Person, Position}
+import model.{Cabby, Passenger, Person, Position}
 
 import scala.collection.mutable.{HashMap, ListBuffer}
 import scala.util.Try
@@ -9,8 +9,8 @@ trait Maps {
 
   def unblocked(position: Position): Boolean
   def find[A](position: Position): ListBuffer[A]
-  def add(cabby: Cabby): Unit
-  def update(cabby: Cabby, newPosition: Position): Unit
+  def add(person: Person): Unit
+  def update(person: Person, newPosition: Position): Unit
 }
 
 case class RoadMap(roads: Array[Array[Boolean]]) extends Maps {
@@ -19,27 +19,33 @@ case class RoadMap(roads: Array[Array[Boolean]]) extends Maps {
 
   private val people: PeopleByPosition = new PeopleByPosition
 
-  def unblocked(position: Position): Boolean = {
+  override def unblocked(position: Position): Boolean = {
     Try(roads(position.x)(position.y)).getOrElse(false)
   }
 
-  def find[A](position: Position): ListBuffer[A] = {
-    people.get(position).filter(_.nonEmpty).fold(ListBuffer.empty[A])(x => x.asInstanceOf[ListBuffer[A]])
+  override def find[A](position: Position): ListBuffer[A] = {
+    people.get(position).filter(_.nonEmpty).fold(ListBuffer.empty[A])(x => {
+      x.filter(_.isInstanceOf[A]).asInstanceOf[ListBuffer[A]]
+    })
   }
 
-  def add(cabby: Cabby): Unit = people.get(cabby.currentPosition)
+  override def add(person: Person): Unit = people.get(person.currentPosition)
     .filter(_.nonEmpty)
-    .fold(ifEmpty = if(unblocked(cabby.currentPosition)) {
-      this.people.put(cabby.currentPosition, ListBuffer(cabby))
+    .fold(ifEmpty = if(unblocked(person.currentPosition)) {
+      this.people.put(person.currentPosition, ListBuffer(person))
     })(cabbies => {
-      if(cabbies.contains(cabby)) cabbies -= cabby
-      cabbies += cabby
+      if(cabbies.contains(person)) cabbies -= person
+      cabbies += person
     })
 
-  def update(cabby: Cabby, newPosition: Position): Unit = {
-    val filtered = people(cabby.currentPosition).filterNot(_.equals(cabby))
-    this.people.updated(cabby.currentPosition, filtered)
-    this.add(cabby.copy(currentPosition = newPosition))
+  override def update(person: Person, newPosition: Position): Unit = {
+    val filtered = people(person.currentPosition).filterNot(_.equals(person))
+    this.people.updated(person.currentPosition, filtered)
+    val newPersonPosotion = person match {
+      case cabby: Cabby => cabby.copy(currentPosition = newPosition)
+      case passenger: Passenger => passenger.copy(currentPosition = newPosition)
+    }
+    this.add(newPersonPosotion)
   }
 
 }
