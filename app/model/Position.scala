@@ -35,6 +35,7 @@ case class PriorityPosition(counter: Int, position: Position) extends Ordered[Pr
 
   override def equals(obj: Any): Boolean = obj match {
     case other: PriorityPosition => this.position.equals(other.position)
+    case other: Position => this.position.equals(other)
     case _ => false
   }
 

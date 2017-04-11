@@ -16,8 +16,8 @@ case class TaxiCaller (roadMap: RoadMap) {
       priorityPosition.neighbors(roadMap.unblocked)
         .map(PriorityPosition(priorityPosition.counter + 1, _))
         .filterNot(scoringPositions.contains)
-        .map(prioritizePosition)
-        .map(priority => roadMap.listIn[Cabby](priority.position)).flatten
+        .map(prioritizePosition(_).position)
+        .map(roadMap.listIn[Cabby](_)).flatten
         .find(_.empty).fold(ifEmpty = findTaxiBy(queuePositions.dequeue()))(cabby => {
         this.scoringPositions += priorityPosition
         cabby
@@ -49,8 +49,8 @@ case class Router(roadMap: RoadMap) {
         .map(PriorityPosition(priorityPosition.counter + 1, _))
         .filterNot(scoringPositions.contains)
         .map(prioritizePosition)
-        .find(_.position.equals(route.targetPosition))
-        .fold(ifEmpty = find(queuePositions.dequeue()))(x => x)
+        .find(_.equals(route.targetPosition))
+        .fold(ifEmpty = find(queuePositions.dequeue()))(prioritizePosition(_))
     }
 
     val currentPosition = prioritizePosition(PriorityPosition(0, route.originPosition))
