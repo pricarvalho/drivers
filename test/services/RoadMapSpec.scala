@@ -7,7 +7,6 @@ import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
 
 import scala.collection.mutable.ListBuffer
-
 @RunWith(classOf[JUnitRunner])
 class RoadMapSpec extends Specification {
 
@@ -21,7 +20,7 @@ class RoadMapSpec extends Specification {
         subject.add(Cabby(tagCar = "APRIL-2017", position, statusCode = 1))
         subject.add(Cabby(tagCar = "APRIL-2018", position, statusCode = 1))
 
-        val result = subject.peopleInPosition[Cabby](position, classOf[Cabby])
+        val result = subject.listIn[Cabby](position)
         result.isEmpty must beFalse
         result.size must beEqualTo(2)
       }
@@ -33,11 +32,11 @@ class RoadMapSpec extends Specification {
         subject.add(Cabby(tagCar = "APRIL-2017", firstPosition, statusCode = 1))
         subject.add(Cabby(tagCar = "APRIL-2018", secondPosition, statusCode = 1))
 
-        val firstResult = subject.peopleInPosition[Cabby](firstPosition, classOf[Cabby])
+        val firstResult = subject.listIn[Cabby](firstPosition)
         firstResult.isEmpty must beFalse
         firstResult.size must beEqualTo(1)
 
-        val secondResult = subject.peopleInPosition[Cabby](secondPosition, classOf[Cabby])
+        val secondResult = subject.listIn[Cabby](secondPosition)
         secondResult.isEmpty must beFalse
         secondResult.size must beEqualTo(1)
       }
@@ -51,13 +50,13 @@ class RoadMapSpec extends Specification {
         val passenger = Passenger(1, Route(position, Position(14,7)))
         subject.add(passenger)
 
-        val resultForCabbies: ListBuffer[Cabby] = subject.peopleInPosition[Cabby](position, classOf[Cabby])
+        val resultForCabbies: ListBuffer[Cabby] = subject.listIn[Cabby](position)
         resultForCabbies.isEmpty must beFalse
         resultForCabbies.size must beEqualTo(1)
         resultForCabbies.contains(cabby) must beTrue
         resultForCabbies.contains(passenger) must beFalse
 
-        val resultForPassengers: ListBuffer[Passenger] = subject.peopleInPosition[Passenger](position, classOf[Passenger])
+        val resultForPassengers: ListBuffer[Passenger] = subject.listIn[Passenger](position)
         resultForPassengers.isEmpty must beFalse
         resultForPassengers.size must beEqualTo(1)
         resultForPassengers.contains(passenger) must beTrue

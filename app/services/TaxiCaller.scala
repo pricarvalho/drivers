@@ -19,7 +19,7 @@ case class TaxiCaller @Inject()(roadMap: RoadMap) {
         .map(PriorityPosition(priorityPosition.counter + 1, _))
         .filterNot(scoringPositions.contains)
         .map(prioritizePosition)
-        .map(priority => roadMap.peopleInPosition(priority.position, classOf[Cabby])).flatten
+        .map(priority => roadMap.listIn[Cabby](priority.position)).flatten
         .find(_.empty).fold(ifEmpty = findTaxiBy(queuePositions.dequeue()))(x => x)
     }
 

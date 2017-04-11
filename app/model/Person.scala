@@ -9,6 +9,8 @@ trait Person {
 
 case class Cabby(tagCar: String, currentPosition: Position, private val statusCode: Int) extends Person {
 
+
+
   def empty = statusCode == 1
   def onTheWay = statusCode == 2
   def full = statusCode == 3
@@ -24,6 +26,7 @@ case class Cabby(tagCar: String, currentPosition: Position, private val statusCo
 
 object Cabby {
   implicit val jsonFormat = Json.format[Cabby]
+  implicit val clazz = classOf[Cabby]
 }
 
 case class Passenger(id: Long, currentPosition: Position, route: Route) extends Person {
@@ -36,4 +39,6 @@ object Passenger {
   def apply(id: Long, route: Route): Passenger = Passenger(id, route.originPosition, route)
 
   implicit val jsonFormat = Json.format[Cabby]
+  implicit val clazz = classOf[Passenger]
+
 }
