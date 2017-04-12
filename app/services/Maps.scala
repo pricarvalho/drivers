@@ -8,15 +8,27 @@ import scala.util.Try
 trait Maps[T <: Person] {
 
   val roads: Array[Array[Boolean]]
-  val people: HashMap[Position, MutableSet[T]]
+  val people = new HashMap[Position, MutableSet[T]]
 
   def unblocked(position: Position): Boolean = {
     Try(roads(position.x)(position.y)).getOrElse(false)
   }
 
-  def list(position: Position): Set[T]
+  def find(person: T): Option[T] = {
+    people.get(person.currentPosition).flatMap(_.find(_.equals(person)))
+  }
 
-  def update(person: T, newPosition: Position)
+  def list(position: Position): Set[T] = {
+    people.get(position).filter(_.nonEmpty).fold(Set.empty[T])(x => x.toSet)
+  }
+
+  def updatePosition(person: T, newPosition: Position): Unit = {
+    val filtered = people(person.currentPosition).filterNot(_.equals(person))
+    this.people.updated(person.currentPosition, filtered)
+    this.add(updatedPersonPosition(person, newPosition))
+  }
+
+  protected def updatedPersonPosition(person: T, newPosition: Position): T
 
   def add(person: T): Unit = people.get(person.currentPosition)
     .filter(_.nonEmpty)
@@ -31,30 +43,17 @@ trait Maps[T <: Person] {
 
 case class CabbiesRoadMap(roads: Array[Array[Boolean]]) extends CabbiesMap
 trait CabbiesMap extends Maps[Cabby] {
-  override val people = new HashMap[Position, MutableSet[Cabby]]
 
-  override def list(position: Position): Set[Cabby] = {
-    people.get(position).filter(_.nonEmpty).fold(Set.empty[Cabby])(x => x.toSet)
-  }
-
-  override def update(cabby: Cabby, newPosition: Position): Unit = {
-    val filtered = people(cabby.currentPosition).filterNot(_.equals(cabby))
-    this.people.updated(cabby.currentPosition, filtered)
-    this.add(cabby.copy(currentPosition = newPosition))
+  override protected def updatedPersonPosition(cabby: Cabby, newPosition: Position): Cabby = {
+   cabby.copy(currentPosition = newPosition)
   }
 }
 
 case class PassengersRoadMap(roads: Array[Array[Boolean]]) extends PassengersMap
 trait PassengersMap extends Maps[Passenger] {
-  override val people = new HashMap[Position, MutableSet[Passenger]]
 
-  override def list(position: Position): Set[Passenger] = {
-    people.get(position).filter(_.nonEmpty).fold(Set.empty[Passenger])(x => x.toSet)
+  override protected def updatedPersonPosition(cabby: Passenger, newPosition: Position): Passenger = {
+    cabby.copy(currentPosition = newPosition)
   }
 
-  override def update(passenger: Passenger, newPosition: Position): Unit = {
-    val filtered = people(passenger.currentPosition).filterNot(_.equals(passenger))
-    this.people.updated(passenger.currentPosition, filtered)
-    this.add(passenger.copy(currentPosition = newPosition))
-  }
 }

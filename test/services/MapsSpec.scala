@@ -10,7 +10,7 @@ class MapsSpec extends Specification {
 
   "CabbiesMap" should {
 
-    "add" in {
+    "add and list" in {
 
       "two different cabbies in the same positions" in {
         val subject = MapFixture.createCabbiesRoadMap
@@ -41,11 +41,28 @@ class MapsSpec extends Specification {
 
     }
 
+//    "update" in {
+//
+//      "one cabbie in the same positions" in {
+//        val subject = MapFixture.createCabbiesRoadMap
+//        val firstPosition = Position(10, 2)
+//
+//        subject.add(Cabby(tagCar = "APRIL-2017", firstPosition, statusCode = 1))
+//        val cabbyAdd = subject list firstPosition
+//        cabbyAdd.isEmpty must beFalse
+//        cabbyAdd.size must beEqualTo(2)
+//
+//        val newPosition = Position(12, 2)
+//        subject.update(cabbyAdd.head, newPosition)
+//
+//      }
+//    }
+
   }
 
   "PassengersMap" should {
 
-    "add" in {
+    "add and list" in {
 
       "two different cabbies in the same positions" in {
         val subject = MapFixture.createPassengersMap

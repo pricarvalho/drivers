@@ -6,7 +6,6 @@ trait Person{
  val currentPosition: Position
 }
 
-
 case class Cabby(tagCar: String, currentPosition: Position, private val statusCode: Int) extends Person {
 
   def empty = statusCode == 1
