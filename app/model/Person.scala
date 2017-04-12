@@ -2,14 +2,12 @@ package model
 
 import play.api.libs.json.Json
 
-trait Person {
-
-  val currentPosition: Position
+trait Person{
+ val currentPosition: Position
 }
 
+
 case class Cabby(tagCar: String, currentPosition: Position, private val statusCode: Int) extends Person {
-
-
 
   def empty = statusCode == 1
   def onTheWay = statusCode == 2
@@ -29,14 +27,11 @@ object Cabby {
   implicit val clazz = classOf[Cabby]
 }
 
-case class Passenger(id: Long, currentPosition: Position, route: Route) extends Person {
-
-
-}
+case class Passenger(id: Long, currentPosition: Position, route: Route) extends Person
 
 object Passenger {
 
-  def apply(id: Long, route: Route): Passenger = Passenger(id, route.originPosition, route)
+  def apply(id: Long, route: Route): Passenger = new Passenger(id, route.originPosition, route)
 
   implicit val jsonFormat = Json.format[Cabby]
   implicit val clazz = classOf[Passenger]

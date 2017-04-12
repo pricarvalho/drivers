@@ -20,7 +20,7 @@ class TaxiCallerSpec extends Specification {
         val result = TaxiCaller(mapa).callFrom(passenger)
 
         result.isEmpty must beFalse
-        result.get.queue.size must beEqualTo(16)
+        result.get.traveledRoute.size must beEqualTo(16)
       }
 
       "with two empty cabby on the map in the same position" in {

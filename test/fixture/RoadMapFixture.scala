@@ -3,13 +3,13 @@ package fixture
 import java.io.FileNotFoundException
 
 import play.api.Environment
-import services.RoadMap
+import services.{CabbiesMap, CabbiesRoadMap}
 
 import scala.io.Source.fromInputStream
 
 object RoadMapFixture {
 
-  def create: RoadMap = RoadMap(roads)
+  def create: CabbiesMap = CabbiesRoadMap(roads)
 
   val roads: Array[Array[Boolean]] = {
     val file = Environment.simple().resourceAsStream("cidade.txt").map(fromInputStream)

@@ -5,9 +5,9 @@ import javax.inject.Inject
 import json.json.PassengerSavesRequest
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.Maps
+import services.PassengersMap
 
-class Passengers @Inject()(maps: Maps) extends Controller {
+class Passengers @Inject()(maps: PassengersMap) extends Controller {
 
   def post = Action (parse.json) { request =>
     val passengerRequest = Json.fromJson[PassengerSavesRequest](request.body).asOpt
