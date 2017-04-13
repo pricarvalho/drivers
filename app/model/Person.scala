@@ -3,7 +3,7 @@ package model
 import play.api.libs.json.Json
 
 trait Person{
- val currentPosition: Position
+  val currentPosition: Position
 }
 
 case class Cabby(tagCar: String, currentPosition: Position, private val statusCode: Int) extends Person {
@@ -23,16 +23,29 @@ case class Cabby(tagCar: String, currentPosition: Position, private val statusCo
 
 object Cabby {
   implicit val jsonFormat = Json.format[Cabby]
-  implicit val clazz = classOf[Cabby]
+
+  implicit def update(cabby: Cabby, newPosition: Position): Cabby = {
+    cabby.copy(currentPosition = newPosition)
+  }
 }
 
-case class Passenger(id: Long, currentPosition: Position, route: Route) extends Person
+case class Passenger(id: Long, currentPosition: Position, route: Route) extends Person {
 
+  override def equals(obj: scala.Any): Boolean = obj match {
+    case other: Passenger => this.id.equals(other.id)
+    case _ => false
+  }
+
+  override def hashCode: Int = id.hashCode + currentPosition.hashCode
+}
 object Passenger {
+
+  implicit def update(passenger: Passenger, newPosition: Position): Passenger = {
+    passenger.copy(currentPosition = newPosition)
+  }
 
   def apply(id: Long, route: Route): Passenger = new Passenger(id, route.originPosition, route)
 
   implicit val jsonFormat = Json.format[Cabby]
-  implicit val clazz = classOf[Passenger]
 
 }

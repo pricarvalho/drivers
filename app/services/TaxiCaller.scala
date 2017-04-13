@@ -19,9 +19,9 @@ case class TaxiCaller (roadMap: CabbiesMap) {
         .map(prioritizePosition(_).position)
         .map(position => roadMap list position).flatten
         .find(_.empty).fold(ifEmpty = findTaxiBy(positions dequeue))(cabby => {
-        this.scoresByPositions += priorityPosition
-        cabby
-      })
+          this.scoresByPositions += priorityPosition
+          cabby
+        })
     }
 
     val currentPosition = prioritizePosition(PriorityPosition(0, passenger.currentPosition))

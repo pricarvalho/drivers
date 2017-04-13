@@ -41,23 +41,23 @@ class MapsSpec extends Specification {
 
     }
 
-    "find and update" in {
+    "move" in {
 
-      "one cabbie in the same positions" in {
+      "one cabbie to another position" in {
         val subject = MapFixture.createCabbiesRoadMap
 
         val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), statusCode = 1)
         subject.add(cabby)
-        val addCabby = subject find cabby
+        val addCabby = subject.list(cabby.currentPosition).find(_.equals(cabby))
         addCabby.head must beEqualTo(cabby)
 
         val updatableCabby = addCabby.head.copy(currentPosition = Position(12, 2))
-        subject.updatePosition(addCabby.head, updatableCabby.currentPosition)
-        val updatedCabby = subject find updatableCabby
+        subject.movePosition(addCabby.head, updatableCabby.currentPosition)
+        val updatedCabby = subject.list(updatableCabby.currentPosition).find(_.equals(cabby))
         updatedCabby.isEmpty must beFalse
         updatedCabby.head must beEqualTo(updatableCabby)
 
-        val removedCabby = subject find cabby
+        val removedCabby = subject.list(cabby.currentPosition).find(_.equals(cabby))
         removedCabby.isEmpty must beTrue;
       }
     }
@@ -95,6 +95,27 @@ class MapsSpec extends Specification {
         secondResult.size must beEqualTo(1)
       }
 
+    }
+
+    "move" in {
+
+      "one passenger to another position" in {
+        val subject = MapFixture.createPassengersMap
+
+        val passenger = Passenger(id = 1, Route(Position(0,0),Position(12,2)))
+        subject.add(passenger)
+        val addCabby = subject.list(passenger.currentPosition).find(_.equals(passenger))
+        addCabby.head must beEqualTo(passenger)
+
+        val updatableCabby = addCabby.head.copy(currentPosition = Position(2, 0))
+        subject.movePosition(addCabby.head, updatableCabby.currentPosition)
+        val updatedCabby = subject.list(updatableCabby.currentPosition).find(_.equals(passenger))
+        updatedCabby.isEmpty must beFalse
+        updatedCabby.head must beEqualTo(updatableCabby)
+
+        val removedCabby = subject.list(passenger.currentPosition).find(_.equals(passenger))
+        removedCabby.isEmpty must beTrue;
+      }
     }
 
   }
