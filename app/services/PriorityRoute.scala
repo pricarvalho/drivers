@@ -41,21 +41,21 @@ case class Caller(roadMap: CabbiesMap) extends PriorityRoute {
 
   def from(passenger: Passenger): Option[CallerAnswered] = {
 
-    def findTaxiBy(priorityPosition: PriorityPosition): Cabby = {
+    def call(priorityPosition: PriorityPosition): Cabby = {
       priorityPosition.neighbors(roadMap unblocked)
         .map(PriorityPosition(priorityPosition.counter + 1, _))
         .filterNot(scorePositions.contains)
         .map(prioritize(_).position)
         .map(position => roadMap list position).flatten
         .find(cabby => cabby.empty)
-        .fold(ifEmpty = findTaxiBy(positions dequeue))(cabby => {
+        .fold(ifEmpty = call(positions dequeue))(cabby => {
           this.scorePositions += priorityPosition
           cabby
         })
     }
 
     val currentPosition = prioritize(PriorityPosition(0, passenger.currentPosition))
-    Try(findTaxiBy(currentPosition)).toOption
+    Try(call(currentPosition)).toOption
       .map(CallerAnswered(passenger, _, scorePositions.reverse.toList))
   }
 
