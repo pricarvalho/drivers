@@ -41,22 +41,26 @@ class MapsSpec extends Specification {
 
     }
 
-//    "update" in {
-//
-//      "one cabbie in the same positions" in {
-//        val subject = MapFixture.createCabbiesRoadMap
-//        val firstPosition = Position(10, 2)
-//
-//        subject.add(Cabby(tagCar = "APRIL-2017", firstPosition, statusCode = 1))
-//        val cabbyAdd = subject list firstPosition
-//        cabbyAdd.isEmpty must beFalse
-//        cabbyAdd.size must beEqualTo(2)
-//
-//        val newPosition = Position(12, 2)
-//        subject.update(cabbyAdd.head, newPosition)
-//
-//      }
-//    }
+    "find and update" in {
+
+      "one cabbie in the same positions" in {
+        val subject = MapFixture.createCabbiesRoadMap
+
+        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), statusCode = 1)
+        subject.add(cabby)
+        val addCabby = subject find cabby
+        addCabby.head must beEqualTo(cabby)
+
+        val updatableCabby = addCabby.head.copy(currentPosition = Position(12, 2))
+        subject.updatePosition(addCabby.head, updatableCabby.currentPosition)
+        val updatedCabby = subject find updatableCabby
+        updatedCabby.isEmpty must beFalse
+        updatedCabby.head must beEqualTo(updatableCabby)
+
+        val removedCabby = subject find cabby
+        removedCabby.isEmpty must beTrue;
+      }
+    }
 
   }
 

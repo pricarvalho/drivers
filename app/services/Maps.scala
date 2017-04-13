@@ -15,7 +15,9 @@ trait Maps[T <: Person] {
   }
 
   def find(person: T): Option[T] = {
-    people.get(person.currentPosition).flatMap(_.find(_.equals(person)))
+    people.get(person.currentPosition).flatMap(_.find(otherPerson => {
+      otherPerson.equals(person) && otherPerson.currentPosition.equals(person.currentPosition)
+    }))
   }
 
   def list(position: Position): Set[T] = {
@@ -23,8 +25,8 @@ trait Maps[T <: Person] {
   }
 
   def updatePosition(person: T, newPosition: Position): Unit = {
-    val filtered = people(person.currentPosition).filterNot(_.equals(person))
-    this.people.updated(person.currentPosition, filtered)
+    val peoplePosition = people(person.currentPosition)
+    if(peoplePosition.contains(person)) peoplePosition.remove(person)
     this.add(updatedPersonPosition(person, newPosition))
   }
 
