@@ -17,7 +17,7 @@ class TaxiCallerSpec extends Specification {
         mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), statusCode = 1))
 
         val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
-        val result = TaxiCaller(mapa).callFrom(passenger)
+        val result = Caller(mapa).from(passenger)
 
         result.isEmpty must beFalse
         result.get.traveledRoute.size must beEqualTo(16)
@@ -29,7 +29,7 @@ class TaxiCallerSpec extends Specification {
         mapa.add(Cabby(tagCar = "APRIL-2018", Position(10,2), statusCode = 1))
 
         val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
-        val result = TaxiCaller(mapa).callFrom(passenger)
+        val result = Caller(mapa).from(passenger)
 
         result.isEmpty must beFalse
       }
@@ -41,7 +41,7 @@ class TaxiCallerSpec extends Specification {
         mapa.add(Cabby(tagCar = "APRIL-2018", Position(2,2), statusCode = 1))
 
         val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
-        val result = TaxiCaller(mapa).callFrom(passenger)
+        val result = Caller(mapa).from(passenger)
 
         result.isEmpty must beFalse
         result.get.cabby must beEqualTo(closerCabby)
@@ -54,7 +54,7 @@ class TaxiCallerSpec extends Specification {
         mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), statusCode = 2))
 
         val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
-        val result = TaxiCaller(mapa).callFrom(passenger)
+        val result = Caller(mapa).from(passenger)
 
         result.isEmpty must beFalse
         result.get.cabby must beEqualTo(fartherCabby)
@@ -64,7 +64,7 @@ class TaxiCallerSpec extends Specification {
     "returns None for call a taxi driver that not exists on the map" in {
       val mapa = MapFixture.createCabbiesRoadMap
       val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
-      val result = TaxiCaller(mapa).callFrom(passenger)
+      val result = Caller(mapa).from(passenger)
 
       result must beEqualTo(None)
     }
