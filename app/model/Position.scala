@@ -27,11 +27,11 @@ object Position {
   implicit val jsonFormat = Json.format[Position]
 }
 
-case class PriorityPosition(counter: Int, position: Position) extends Ordered[PriorityPosition] {
+case class PriorityPosition(score: Int, position: Position) extends Ordered[PriorityPosition] {
 
   def neighbors(f: Position => Boolean) = this.position.neighbors.filter(f)
 
-  override def compare(other: PriorityPosition) = other.counter - this.counter
+  override def compare(other: PriorityPosition) = other.score - this.score
 
   override def equals(obj: Any): Boolean = obj match {
     case other: PriorityPosition => this.position.equals(other.position)
@@ -39,6 +39,6 @@ case class PriorityPosition(counter: Int, position: Position) extends Ordered[Pr
     case _ => false
   }
 
-  override def hashCode: Int = counter.hashCode() + position.hashCode
+  override def hashCode: Int = score.hashCode() + position.hashCode
 
 }

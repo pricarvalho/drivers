@@ -7,9 +7,9 @@ import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class TaxiCallerSpec extends Specification {
+class CallerSpec extends Specification {
 
-  "TaxiCaller" should {
+  "Caller" should {
 
     "call a taxi driver closer with" in {
       "one empty cabby on the map" in {
@@ -20,7 +20,7 @@ class TaxiCallerSpec extends Specification {
         val result = Caller(mapa).from(passenger)
 
         result.isEmpty must beFalse
-        result.get.traveledRoute.size must beEqualTo(16)
+        result.get.path.size must beEqualTo(12)
       }
 
       "with two empty cabby on the map in the same position" in {
