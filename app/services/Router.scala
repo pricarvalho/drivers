@@ -6,11 +6,7 @@ import scala.collection.mutable.Set
 
 class Router(private val cabbiesMap: CabbiesMap) extends PriorityPositions {
 
-  protected val scorePositions: Array[Array[Int]] = {
-    val positions = new Array[Array[Int]](cabbiesMap.roads.size)
-    for (i <- 0 until positions.size) positions(i) = new Array[Int](cabbiesMap.roads(i).size)
-    positions
-  }
+  override protected val roads: Array[Array[Boolean]] = cabbiesMap.roads
 
   def evaluate(route: Route): Set[PriorityPosition] = {
     val currentPosition = prioritize(PriorityPosition(1, route.originPosition))

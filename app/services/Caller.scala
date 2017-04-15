@@ -5,13 +5,9 @@ import model._
 import scala.collection.mutable.Set
 import scala.util.Try
 
-case class Caller(private val cabbiesMap: CabbiesMap) extends PriorityPositions {
+class Caller(private val cabbiesMap: CabbiesMap) extends PriorityPositions {
 
-  protected val scorePositions: Array[Array[Int]] = {
-    val positions = new Array[Array[Int]](cabbiesMap.roads.size)
-    for (i <- 0 until positions.size) positions(i) = new Array[Int](cabbiesMap.roads(i).size)
-    positions
-  }
+  override protected val roads: Array[Array[Boolean]] = cabbiesMap.roads
 
   def from(passenger: Passenger): Option[CallerAnswered] = {
 

@@ -7,8 +7,13 @@ import scala.util.Try
 
 trait PriorityPositions {
 
+  protected val roads: Array[Array[Boolean]];
   protected val positions = new PriorityQueue[PriorityPosition]
-  protected val scorePositions: Array[Array[Int]]
+  private lazy val scorePositions: Array[Array[Int]] = {
+    val positions = new Array[Array[Int]](roads.size)
+    for (i <- 0 until positions.size) positions(i) = new Array[Int](roads(i).size)
+    positions
+  }
 
   protected def prioritize(priorityPosition: PriorityPosition): PriorityPosition = {
     this.positions enqueue priorityPosition
