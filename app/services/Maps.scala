@@ -36,7 +36,11 @@ trait Maps[T <: Person] {
 }
 
 case class CabbiesRoadMap(roads: Array[Array[Boolean]]) extends CabbiesMap
-trait CabbiesMap extends Maps[Cabby]
+trait CabbiesMap extends Maps[Cabby] {
+
+  def find(tagCar: String): Option[Cabby] = super.people.values.flatten[Cabby].find(_.equals(tagCar))
+
+}
 
 case class PassengersRoadMap(roads: Array[Array[Boolean]]) extends PassengersMap
 trait PassengersMap extends Maps[Passenger]
