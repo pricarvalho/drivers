@@ -1,29 +1,33 @@
 package services
 
 import model.MoveStatus.{ARRIVED, ON_THE_WAY}
-import model.{Cabby, MoveStatus, PriorityPosition, Route}
+import model._
 
-import scala.collection.mutable.Set
+class Request(cabbies: CabbiesMap, passengers: PassengersMap) {
 
-class Request(cabbies: CabbiesMap) {
-
-  def to(move: Move): Option[MoveStatus] = {
-    val evaluatedPath = new Router(cabbies).evaluate(move.route)
+  def to(move: Move): Option[RequestResult] = {
+    val evaluatedPath = new Router(cabbies).evaluate(move.route).toList.reverse
     val path = move.timeOnThePath(evaluatedPath)
     path.headOption.map(priority => {
-      cabbies.movePosition(move.cabby, priority.position)
-      if(path.size > 1) ON_THE_WAY else ARRIVED
+      val position = priority.position
+      cabbies.movePosition(move.cabby, position)
+      if(path.size > 1) RequestResult(ON_THE_WAY, path)
+      else RequestResult(ARRIVED, path)
     })
   }
 
 }
 
-case class Move(cabby: Cabby,  route: Route, time: Int = 1) {
+case class RequestResult(status: MoveStatus, path: List[PriorityPosition])
 
-  def timeOnThePath(path: Set[PriorityPosition]): Set[PriorityPosition] = {
+case class Move(cabby: Cabby, passenger: Passenger, route: Route, time: Int = 1) {
+
+  def isSamePassengerOrigin(position: Position): Boolean = position.equals(passenger.currentPosition)
+
+  def timeOnThePath(path: List[PriorityPosition]): List[PriorityPosition] = {
     if(path.size > time)
-      path drop ((path.size - time) - 1)
-    else path.drop(0)
+      path drop (time)
+    else path.drop(path.size - 1)
   }
 
 }

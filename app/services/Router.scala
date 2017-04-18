@@ -19,8 +19,9 @@ class Router(private val cabbiesMap: CabbiesMap) extends PriorityPositions {
         .map(prioritize)
         .find(_.equals(route.targetPosition))
         .fold(ifEmpty = search(positions dequeue))(targetPosition => {
-          super.score(targetPosition)
-          discoverRoute(targetPosition)
+          val scoredPosition = super.score(targetPosition)
+          path.add(scoredPosition)
+          discoverRoute(scoredPosition)
         })
     }
 
@@ -34,7 +35,6 @@ class Router(private val cabbiesMap: CabbiesMap) extends PriorityPositions {
           else discoverRoute(neighbor)
         })
     }
-
     search(super.score(currentPosition))
   }
 
