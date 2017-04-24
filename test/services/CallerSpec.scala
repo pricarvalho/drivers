@@ -20,7 +20,7 @@ class CallerSpec extends Specification {
         val result = new Caller(mapa).from(passenger)
 
         result.isEmpty must beFalse
-        result.get.path.size must beEqualTo(12)
+        result.get.path.size must beEqualTo(13)
       }
 
       "with two empty cabby on the map in the same position" in {
