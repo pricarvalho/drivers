@@ -20,6 +20,12 @@ trait Maps[T <: Person] {
     people.get(position).filter(_.nonEmpty).fold(Set.empty[T])(x => x.toSet)
   }
 
+  def update(person: T) = {
+    val peoplePosition = people(person.currentPosition)
+    if(peoplePosition.contains(person)) peoplePosition.remove(person)
+    this.add(person)
+  }
+
   def movePosition(person: T, newPosition: Position)(implicit f: (T, Position) => T): Option[T] = {
     val peoplePosition = people(person.currentPosition)
     if(peoplePosition.contains(person)) peoplePosition.remove(person)

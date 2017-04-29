@@ -1,6 +1,5 @@
 package services
 
-import controllers.RouteInfo
 import model._
 import play.api.libs.json.Json
 
@@ -36,9 +35,10 @@ class Caller(private val cabbiesMap: CabbiesMap) extends PriorityPositions {
 
 case class CallerAnswered(passenger: Passenger, cabby: Cabby, path: List[PriorityPosition]) {
 
-  def toRouteInfo = RouteInfo(cabby, passenger, Route(cabby.currentPosition, passenger.currentPosition))
+  def toRouteInfo = RouteInfo(cabby.copy(status = 2), passenger, Route(cabby.currentPosition, passenger.currentPosition))
 
 }
+
 object CallerAnswered {
   implicit val jsonFormat = Json.format[CallerAnswered]
 }

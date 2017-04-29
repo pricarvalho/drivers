@@ -1,42 +1,58 @@
 package services
 
-import controllers.RouteInfo
 import model._
 import play.api.libs.json.Json
 
 class Request(cabbies: CabbiesMap, passengers: PassengersMap) {
 
-  def to(move: Move): RequestResult = {
+  def to(move: Move): RouteInfo = {
     val evaluatedPath = new Router(cabbies).evaluate(move.route).toList.sortBy(_.score)
-    println(evaluatedPath.mkString("\n"))
     val path = move.timeOnThePath(evaluatedPath)
-    val position = path.head.position
-    cabbies.movePosition(move.cabby, position).fold(ifEmpty = ???)(cabby => {
-      RequestResult(cabby, move.passenger, path)
+    cabbies.movePosition(move.cabby, path.head.position).fold(ifEmpty = ???)(cabby => {
+      val routeInfo = RouteInfo(cabby, move.passenger, path)
+      updatePersonWith(routeInfo)
     })
   }
 
-}
-
-case class RequestResult(cabby: Cabby, passenger: Passenger, path: List[PriorityPosition]) {
-  def toRouteInfo = {
-    if(path.length == 1) {
-      path.head.position match {
-        case passenger.currentPosition => RouteInfo(cabby, passenger, Route(passenger.currentPosition, passenger.targetPosition))
-        case passenger.targetPosition => RouteInfo(cabby, passenger, Route(passenger.targetPosition, passenger.targetPosition))
-      }
-    } else {
-      RouteInfo(cabby, passenger, Route(path.head.position, path.last.position))
+  private def updatePersonWith(routeInfo: RouteInfo) = {
+    cabbies.update(routeInfo.cabby)
+    if (routeInfo.cabbyStatus == 3) {
+      passengers.movePosition(routeInfo.passenger, routeInfo.cabbyCurrentPosition)
     }
+    routeInfo
   }
 }
-object RequestResult {
-  implicit val jsonFormat = Json.format[RequestResult]
+
+case class RouteInfo(cabby: Cabby, passenger: Passenger, currentRoute: Route, path: List[PriorityPosition] = List.empty) {
+
+  def cabbyCurrentPosition = cabby.currentPosition
+
+  def cabbyStatus = cabby.status
+
+  def toMove(time: Int): Option[Move] = {
+    if(cabbyStatus > 1) Some(Move(cabby, passenger, currentRoute, time)) else None
+  }
+
+}
+
+object RouteInfo {
+
+  implicit val jsonFormat = Json.format[RouteInfo]
+
+  def apply(cabby: Cabby, passenger: Passenger, path: List[PriorityPosition]): RouteInfo = {
+    if(path.length == 1) {
+      path.head.position match {
+        case passenger.currentPosition => new RouteInfo(cabby.copy(status = 3), passenger, Route(passenger.currentPosition, passenger.targetPosition), path)
+        case passenger.targetPosition => new RouteInfo(cabby.copy(status = 1), passenger, Route(passenger.targetPosition, passenger.targetPosition), path)
+      }
+    } else {
+      RouteInfo(cabby, passenger, Route(path.head.position, path.last.position), path)
+    }
+  }
+
 }
 
 case class Move(cabby: Cabby, passenger: Passenger, route: Route, time: Int) {
-
-  def isSamePassengerOrigin(position: Position): Boolean = position.equals(passenger.currentPosition)
 
   def timeOnThePath(path: List[PriorityPosition]): List[PriorityPosition] = {
     if(path.size > time)
