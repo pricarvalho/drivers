@@ -1,7 +1,5 @@
 package services
 
-import java.util.UUID
-
 import model.{Cabby, Passenger, Person, Position}
 
 import scala.collection.mutable.{HashMap, Set => MutableSet}
@@ -22,13 +20,13 @@ trait Maps[T <: Person] {
     people.get(position).filter(_.nonEmpty).fold(Set.empty[T])(x => x.toSet)
   }
 
-  def movePosition(person: T, newPosition: Position)(implicit f: (T, Position) => T): Unit = {
+  def movePosition(person: T, newPosition: Position)(implicit f: (T, Position) => T): Option[T] = {
     val peoplePosition = people(person.currentPosition)
     if(peoplePosition.contains(person)) peoplePosition.remove(person)
     this.add(f(person,newPosition))
   }
 
-  def add(person: T): UUID = {
+  def add(person: T): Option[T] = {
     people.get(person.currentPosition)
       .filter(_.nonEmpty)
       .fold(ifEmpty = if(unblocked(person.currentPosition)) {
@@ -37,7 +35,7 @@ trait Maps[T <: Person] {
         people.remove(person)
         people += person
       })
-    person.uuid
+    this.find(person.uuid)
   }
 }
 

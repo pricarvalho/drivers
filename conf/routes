@@ -4,10 +4,12 @@
 
 # Home page
 GET     /                                       controllers.Application.index
+PUT     /                                       controllers.Application.restart
 
 #Cabby
 POST    /cabbies                                controllers.Cabbies.post
 GET     /cabbies/request-from-passenger/:uuid   controllers.Cabbies.requests(uuid)
+POST    /cabbies/moves                          controllers.Cabbies.move
 
 #Passenger
 POST     /passengers                            controllers.Passengers.post

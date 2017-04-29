@@ -1,26 +1,40 @@
 package services
 
-import model.MoveStatus.{ARRIVED, ON_THE_WAY}
+import controllers.RouteInfo
 import model._
+import play.api.libs.json.Json
 
 class Request(cabbies: CabbiesMap, passengers: PassengersMap) {
 
-  def to(move: Move): Option[RequestResult] = {
-    val evaluatedPath = new Router(cabbies).evaluate(move.route).toList.reverse
+  def to(move: Move): RequestResult = {
+    val evaluatedPath = new Router(cabbies).evaluate(move.route).toList.sortBy(_.score)
+    println(evaluatedPath.mkString("\n"))
     val path = move.timeOnThePath(evaluatedPath)
-    path.headOption.map(priority => {
-      val position = priority.position
-      cabbies.movePosition(move.cabby, position)
-      if(path.size > 1) RequestResult(ON_THE_WAY, path)
-      else RequestResult(ARRIVED, path)
+    val position = path.head.position
+    cabbies.movePosition(move.cabby, position).fold(ifEmpty = ???)(cabby => {
+      RequestResult(cabby, move.passenger, path)
     })
   }
 
 }
 
-case class RequestResult(status: MoveStatus, path: List[PriorityPosition])
+case class RequestResult(cabby: Cabby, passenger: Passenger, path: List[PriorityPosition]) {
+  def toRouteInfo = {
+    if(path.length == 1) {
+      path.head.position match {
+        case passenger.currentPosition => RouteInfo(cabby, passenger, Route(passenger.currentPosition, passenger.targetPosition))
+        case passenger.targetPosition => RouteInfo(cabby, passenger, Route(passenger.targetPosition, passenger.targetPosition))
+      }
+    } else {
+      RouteInfo(cabby, passenger, Route(path.head.position, path.last.position))
+    }
+  }
+}
+object RequestResult {
+  implicit val jsonFormat = Json.format[RequestResult]
+}
 
-case class Move(cabby: Cabby, passenger: Passenger, route: Route, time: Int = 1) {
+case class Move(cabby: Cabby, passenger: Passenger, route: Route, time: Int) {
 
   def isSamePassengerOrigin(position: Position): Boolean = position.equals(passenger.currentPosition)
 
