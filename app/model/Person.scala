@@ -1,9 +1,17 @@
 package model
 
-import play.api.libs.json.Json
+import java.util.UUID
 
-trait Person{
+import play.api.libs.json._
+
+trait Person {
+  val uuid: UUID = UUID.randomUUID()
   val currentPosition: Position
+
+}
+
+object PersonWrites extends OWrites[Person] {
+  def writes(person: Person) = Json.obj("uuid" -> person.uuid.toString)
 }
 
 case class Cabby(tagCar: String, currentPosition: Position, val status: Int) extends Person {
@@ -12,9 +20,10 @@ case class Cabby(tagCar: String, currentPosition: Position, val status: Int) ext
   def onTheWay = status == 2
   def full = status == 3
 
-  override def equals(obj: scala.Any): Boolean = obj match {
+  override def equals(obj: Any): Boolean = obj match {
     case other: Cabby => this.tagCar.equals(other.tagCar)
     case other: String => this.tagCar.equals(other)
+    case other: UUID => this.uuid.equals(other)
     case _ => false
   }
 
@@ -23,30 +32,39 @@ case class Cabby(tagCar: String, currentPosition: Position, val status: Int) ext
 }
 
 object Cabby {
-  implicit val jsonFormat = Json.format[Cabby]
+
+  implicit val jsonFormat = new OFormat[Cabby] {
+    override def reads(json: JsValue): JsResult[Cabby] = Json.format[Cabby].reads(json)
+    override def writes(o: Cabby): JsObject = Json.format[Cabby].writes(o)++PersonWrites.writes(o)
+  }
 
   implicit def update(cabby: Cabby, newPosition: Position): Cabby = {
     cabby.copy(currentPosition = newPosition)
   }
 }
 
-case class Passenger(id: Long, currentPosition: Position, route: Route) extends Person {
+case class Passenger(currentPosition: Position, route: Route) extends Person {
 
-  override def equals(obj: scala.Any): Boolean = obj match {
-    case other: Passenger => this.id.equals(other.id)
+  override def equals(obj: Any): Boolean = obj match {
+    case other: Passenger => this.uuid.equals(other.uuid)
+    case other: UUID => this.uuid.equals(other)
     case _ => false
   }
 
-  override def hashCode: Int = id.hashCode + currentPosition.hashCode
+  override def hashCode: Int = uuid.hashCode + currentPosition.hashCode
 }
+
 object Passenger {
+
+  implicit val jsonFormat = new OFormat[Passenger] {
+    override def reads(json: JsValue): JsResult[Passenger] = Json.format[Passenger].reads(json)
+    override def writes(o: Passenger): JsObject = Json.format[Passenger].writes(o)++PersonWrites.writes(o)
+  }
 
   implicit def update(passenger: Passenger, newPosition: Position): Passenger = {
     passenger.copy(currentPosition = newPosition)
   }
 
-  def apply(id: Long, route: Route): Passenger = new Passenger(id, route.originPosition, route)
-
-  implicit val jsonFormat = Json.format[Cabby]
+  def apply(route: Route): Passenger = new Passenger(route.originPosition, route)
 
 }

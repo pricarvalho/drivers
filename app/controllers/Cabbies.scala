@@ -13,8 +13,8 @@ class Cabbies @Inject()(cabbies: CabbiesMap) extends Controller {
   def post = Action (parse.json) { request =>
     val cabbyRequest = Json.fromJson[CabbySavesRequest](request.body).asOpt
     cabbyRequest.fold(BadRequest("Bad formatted json"))(cabbyRequest => {
-      cabbies.add(cabbyRequest.toCabby)
-      cabbies.find(cabbyRequest.tagCar).fold(BadRequest("Add cabby error: Cabby not found"))(cabby => {
+      val id = cabbies.add(cabbyRequest.toCabby)
+      cabbies.find(id).fold(BadRequest("Add cabby error: Cabby not found"))(cabby => {
         Created(Json.toJson(cabby))
       })
     })
