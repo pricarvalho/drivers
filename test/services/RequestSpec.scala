@@ -14,7 +14,7 @@ class RequestSpec extends Specification {
     "move cabby" in {
       "in time 1 on the path" in {
         val cabbies = MapFixture.createCabbiesRoadMap
-        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), statusCode = 1)
+        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), status = 1)
         cabbies.add(cabby)
         val passengers = MapFixture.createPassengersMap
 
@@ -31,7 +31,7 @@ class RequestSpec extends Specification {
 
       "in all time on the path" in {
         val cabbies = MapFixture.createCabbiesRoadMap
-        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), statusCode = 1)
+        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), status = 1)
         cabbies.add(cabby)
         val passengers = MapFixture.createPassengersMap
 
@@ -48,7 +48,7 @@ class RequestSpec extends Specification {
 
       "in a greater time on the path" in {
         val cabbies = MapFixture.createCabbiesRoadMap
-        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), statusCode = 1)
+        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), status = 1)
         cabbies.add(cabby)
         val passengers = MapFixture.createPassengersMap
 

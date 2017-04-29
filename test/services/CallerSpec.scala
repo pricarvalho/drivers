@@ -14,7 +14,7 @@ class CallerSpec extends Specification {
     "call a taxi driver closer with" in {
       "one empty cabby on the map" in {
         val mapa = MapFixture.createCabbiesRoadMap
-        mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), statusCode = 1))
+        mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), status = 1))
 
         val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
         val result = new Caller(mapa).from(passenger)
@@ -25,8 +25,8 @@ class CallerSpec extends Specification {
 
       "with two empty cabby on the map in the same position" in {
         val mapa = MapFixture.createCabbiesRoadMap
-        mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), statusCode = 1))
-        mapa.add(Cabby(tagCar = "APRIL-2018", Position(10,2), statusCode = 1))
+        mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), status = 1))
+        mapa.add(Cabby(tagCar = "APRIL-2018", Position(10,2), status = 1))
 
         val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
         val result = new Caller(mapa).from(passenger)
@@ -36,9 +36,9 @@ class CallerSpec extends Specification {
 
       "with two empty cabby on the map in distinct positions" in {
         val mapa = MapFixture.createCabbiesRoadMap
-        val closerCabby = Cabby(tagCar = "APRIL-2017", Position(10,2), statusCode = 1)
+        val closerCabby = Cabby(tagCar = "APRIL-2017", Position(10,2), status = 1)
         mapa.add(closerCabby)
-        mapa.add(Cabby(tagCar = "APRIL-2018", Position(2,2), statusCode = 1))
+        mapa.add(Cabby(tagCar = "APRIL-2018", Position(2,2), status = 1))
 
         val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
         val result = new Caller(mapa).from(passenger)
@@ -49,9 +49,9 @@ class CallerSpec extends Specification {
 
       "one empty cabby on the map in distinct positions" in {
         val mapa = MapFixture.createCabbiesRoadMap
-        val fartherCabby = Cabby(tagCar = "APRIL-2018", Position(2,2), statusCode = 1)
+        val fartherCabby = Cabby(tagCar = "APRIL-2018", Position(2,2), status = 1)
         mapa.add(fartherCabby)
-        mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), statusCode = 2))
+        mapa.add(Cabby(tagCar = "APRIL-2017", Position(10,2), status = 2))
 
         val passenger = Passenger(1, Route(Position(0,0), Position(14,7)))
         val result = new Caller(mapa).from(passenger)

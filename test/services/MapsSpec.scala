@@ -15,8 +15,8 @@ class MapsSpec extends Specification {
       "two different cabbies in the same positions" in {
         val subject = MapFixture.createCabbiesRoadMap
         val position = Position(10, 2)
-        subject.add(Cabby(tagCar = "APRIL-2017", position, statusCode = 1))
-        subject.add(Cabby(tagCar = "APRIL-2018", position, statusCode = 1))
+        subject.add(Cabby(tagCar = "APRIL-2017", position, status = 1))
+        subject.add(Cabby(tagCar = "APRIL-2018", position, status = 1))
 
         val result = subject list position
         result.isEmpty must beFalse
@@ -27,8 +27,8 @@ class MapsSpec extends Specification {
         val subject = MapFixture.createCabbiesRoadMap
         val firstPosition = Position(10, 2)
         val secondPosition = Position(2, 2)
-        subject.add(Cabby(tagCar = "APRIL-2017", firstPosition, statusCode = 1))
-        subject.add(Cabby(tagCar = "APRIL-2018", secondPosition, statusCode = 1))
+        subject.add(Cabby(tagCar = "APRIL-2017", firstPosition, status = 1))
+        subject.add(Cabby(tagCar = "APRIL-2018", secondPosition, status = 1))
 
         val firstResult = subject list firstPosition
         firstResult.isEmpty must beFalse
@@ -46,7 +46,7 @@ class MapsSpec extends Specification {
       "one cabbie to another position" in {
         val subject = MapFixture.createCabbiesRoadMap
 
-        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), statusCode = 1)
+        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), status = 1)
         subject.add(cabby)
         val addCabby = subject.list(cabby.currentPosition).find(_.equals(cabby))
         addCabby.head must beEqualTo(cabby)

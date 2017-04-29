@@ -6,12 +6,18 @@ import json.CabbySavesRequest
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.CabbiesMap
+import model.Cabby._
 
-class Cabbies @Inject()(maps: CabbiesMap) extends Controller {
+class Cabbies @Inject()(cabbies: CabbiesMap) extends Controller {
 
   def post = Action (parse.json) { request =>
     val cabbyRequest = Json.fromJson[CabbySavesRequest](request.body).asOpt
-    cabbyRequest.fold(NotAcceptable)(x => Created)
+    cabbyRequest.fold(BadRequest("Bad formatted json"))(cabbyRequest => {
+      cabbies.add(cabbyRequest.toCabby)
+      cabbies.find(cabbyRequest.tagCar).fold(BadRequest("Add cabby error: Cabby not found"))(cabby => {
+        Created(Json.toJson(cabby))
+      })
+    })
   }
 
 }

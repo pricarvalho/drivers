@@ -6,14 +6,15 @@ trait Person{
   val currentPosition: Position
 }
 
-case class Cabby(tagCar: String, currentPosition: Position, private val statusCode: Int) extends Person {
+case class Cabby(tagCar: String, currentPosition: Position, val status: Int) extends Person {
 
-  def empty = statusCode == 1
-  def onTheWay = statusCode == 2
-  def full = statusCode == 3
+  def empty = status == 1
+  def onTheWay = status == 2
+  def full = status == 3
 
   override def equals(obj: scala.Any): Boolean = obj match {
     case other: Cabby => this.tagCar.equals(other.tagCar)
+    case other: String => this.tagCar.equals(other)
     case _ => false
   }
 
