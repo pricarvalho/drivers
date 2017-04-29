@@ -1,7 +1,5 @@
 package json
 
-package json
-
 import model.{Passenger, Position, Route}
 import play.api.libs.json.Json
 
