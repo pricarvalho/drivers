@@ -3,15 +3,16 @@
 # ~~~~
 
 # Home page
-GET     /                               controllers.Application.index
+GET     /                                       controllers.Application.index
 
 #Cabby
-POST     /cabbies                       controllers.Cabbies.post
+POST    /cabbies                                controllers.Cabbies.post
+GET     /cabbies/request-from-passenger/:uuid   controllers.Cabbies.requests(uuid)
 
 #Passenger
-POST     /passengers                    controllers.Passengers.post
+POST     /passengers                            controllers.Passengers.post
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file                   controllers.Assets.at(path="/public", file)
+GET     /assets/*file                           controllers.Assets.at(path="/public", file)
 
     

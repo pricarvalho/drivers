@@ -1,13 +1,12 @@
 package json
 
-import model.{Cabby, Passenger}
+import java.util.UUID
+
 import play.api.libs.json.Json
 
-case class CabbyRequest(tagCar: String, idPassenger: Long) {
+case class CabbyRequest(passenger: String) {
 
-  def findCabby(find: String => Option[Cabby]): Option[Cabby] = find(tagCar)
-
-  def findPassenger(find: Long => Option[Passenger]): Option[Passenger] = find(idPassenger)
+  def uuidPassenger = UUID.fromString(passenger)
 
 }
 

@@ -1,6 +1,7 @@
 package services
 
 import model._
+import play.api.libs.json.Json
 
 import scala.collection.mutable.Set
 import scala.util.Try
@@ -33,3 +34,6 @@ class Caller(private val cabbiesMap: CabbiesMap) extends PriorityPositions {
 }
 
 case class CallerAnswered(passenger: Passenger, cabby: Cabby, path: List[PriorityPosition])
+object CallerAnswered {
+  implicit val jsonFormat = Json.format[CallerAnswered]
+}

@@ -42,3 +42,8 @@ case class PriorityPosition(score: Int, position: Position) extends Ordered[Prio
   override def hashCode: Int = score.hashCode() + position.hashCode
 
 }
+
+object PriorityPosition {
+  implicit val jsonFormat = Json.format[PriorityPosition]
+
+}
