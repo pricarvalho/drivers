@@ -1,4 +1,4 @@
-# Driver
+# Drivers
 Rest API that simulates a passenger call to driver
 
 ## Add Driver
@@ -24,7 +24,7 @@ Rest API that simulates a passenger call to driver
   "originPosition" : {
     "x": 0,
     "y": 0
-	},
+  },
   "targetPosition" : {
     "x": 14,
     "y": 7
