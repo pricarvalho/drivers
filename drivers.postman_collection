@@ -1,0 +1,95 @@
+{
+	"variables": [],
+	"info": {
+		"name": "drivers",
+		"_postman_id": "c4571eda-8957-9c10-d9fe-9d48fd4bca87",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Driver [Add]",
+			"request": {
+				"url": "https://drivers-99.herokuapp.com/drivers",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\n\t\"tagCar\" : \"APRIL-2017\",\n\t\"currentPosition\" : {\n\t\t\"x\": 10,\n    \t\"y\": 2\n\t}\n}"
+				},
+				"description": ""
+			}
+		},
+		{
+			"name": "Passenger [Add]",
+			"request": {
+				"url": "https://drivers-99.herokuapp.com/passengers",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"originPosition\" : {\n\t\t\"x\": 0,\n    \t\"y\": 0\n\t},\n\t\n\t\"targetPosition\" : {\n\t\t\"x\": 14,\n    \t\"y\": 7\n\t}\n\t\n}\n"
+				},
+				"description": ""
+			}
+
+		},
+		{
+			"name": "Driver [Request]",
+			"request": {
+				"url": "https://drivers-99.herokuapp.com/drivers/request-from-passenger/64a7839a-953f-4691-bdec-5147dcc9f460",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Driver [Move]",
+			"request": {
+				"url": "https://drivers-99.herokuapp.com/drivers/moves",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"passenger\": \"64a7839a-953f-4691-bdec-5147dcc9f460\",\n\t\"time\": 0\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Application [Restart]",
+			"request": {
+				"url": "https://drivers-99.herokuapp.com/",
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
