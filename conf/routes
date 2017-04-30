@@ -4,12 +4,12 @@
 
 # Home page
 GET     /                                       controllers.Application.index
-PUT     /                                       controllers.Application.restart
+DELETE  /                                       controllers.Application.restart
 
 #Driver
 POST    /drivers                                controllers.Drivers.post
 GET     /drivers/request-from-passenger/:uuid   controllers.Drivers.requests(uuid)
-PUT     /drivers/moves                          controllers.Drivers.move
+POST    /drivers/moves                          controllers.Drivers.move
 
 #Passenger
 POST     /passengers                            controllers.Passengers.post
