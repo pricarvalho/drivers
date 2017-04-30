@@ -1,34 +1,34 @@
 package services
 
 import fixture.MapFixture
-import model.{Cabby, Passenger, Position, Route}
+import model.{Driver, Passenger, Position, Route}
 import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
 import org.specs2.runner.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class MapsSpec extends Specification {
 
-  "CabbiesMap" should {
+  "DriversMap" should {
 
     "add and list" in {
 
-      "two different cabbies in the same positions" in {
-        val subject = MapFixture.createCabbiesRoadMap
+      "two different drivers in the same positions" in {
+        val subject = MapFixture.createDriversRoadMap
         val position = Position(10, 2)
-        subject.add(Cabby(tagCar = "APRIL-2017", position, status = 1))
-        subject.add(Cabby(tagCar = "APRIL-2018", position, status = 1))
+        subject.add(Driver(tagCar = "APRIL-2017", position, status = 1))
+        subject.add(Driver(tagCar = "APRIL-2018", position, status = 1))
 
         val result = subject list position
         result.isEmpty must beFalse
         result.size must beEqualTo(2)
       }
 
-      "two cabbies for each two different positions" in {
-        val subject = MapFixture.createCabbiesRoadMap
+      "two drivers for each two different positions" in {
+        val subject = MapFixture.createDriversRoadMap
         val firstPosition = Position(10, 2)
         val secondPosition = Position(2, 2)
-        subject.add(Cabby(tagCar = "APRIL-2017", firstPosition, status = 1))
-        subject.add(Cabby(tagCar = "APRIL-2018", secondPosition, status = 1))
+        subject.add(Driver(tagCar = "APRIL-2017", firstPosition, status = 1))
+        subject.add(Driver(tagCar = "APRIL-2018", secondPosition, status = 1))
 
         val firstResult = subject list firstPosition
         firstResult.isEmpty must beFalse
@@ -43,22 +43,22 @@ class MapsSpec extends Specification {
 
     "move" in {
 
-      "one cabbie to another position" in {
-        val subject = MapFixture.createCabbiesRoadMap
+      "one driver to another position" in {
+        val subject = MapFixture.createDriversRoadMap
 
-        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), status = 1)
-        subject.add(cabby)
-        val addCabby = subject.list(cabby.currentPosition).find(_.equals(cabby))
-        addCabby.head must beEqualTo(cabby)
+        val driver = Driver(tagCar = "APRIL-2017", Position(10, 2), status = 1)
+        subject.add(driver)
+        val addDriver = subject.list(driver.currentPosition).find(_.equals(driver))
+        addDriver.head must beEqualTo(driver)
 
-        val updatableCabby = addCabby.head.copy(currentPosition = Position(12, 2))
-        subject.movePosition(addCabby.head, updatableCabby.currentPosition)
-        val updatedCabby = subject.list(updatableCabby.currentPosition).find(_.equals(cabby))
-        updatedCabby.isEmpty must beFalse
-        updatedCabby.head must beEqualTo(updatableCabby)
+        val updatableDriver = addDriver.head.copy(currentPosition = Position(12, 2))
+        subject.movePosition(addDriver.head, updatableDriver.currentPosition)
+        val updatedDriver = subject.list(updatableDriver.currentPosition).find(_.equals(driver))
+        updatedDriver.isEmpty must beFalse
+        updatedDriver.head must beEqualTo(updatableDriver)
 
-        val removedCabby = subject.list(cabby.currentPosition).find(_.equals(cabby))
-        removedCabby.isEmpty must beTrue;
+        val removedDriver = subject.list(driver.currentPosition).find(_.equals(driver))
+        removedDriver.isEmpty must beTrue;
       }
     }
 
@@ -68,23 +68,23 @@ class MapsSpec extends Specification {
 
     "add and list" in {
 
-      "two different cabbies in the same positions" in {
+      "two different drivers in the same positions" in {
         val subject = MapFixture.createPassengersMap
         val position = Position(10, 2)
-        subject.add(Passenger(id = 1, Route(position,Position(12,2))))
-        subject.add(Passenger(id = 2, Route(position,Position(12,2))))
+        subject.add(Passenger(Route(position,Position(12,2))))
+        subject.add(Passenger(Route(position,Position(12,2))))
 
         val result = subject list position
         result.isEmpty must beFalse
         result.size must beEqualTo(2)
       }
 
-      "two cabbies for each two different positions" in {
+      "two drivers for each two different positions" in {
         val subject = MapFixture.createPassengersMap
         val firstPosition = Position(10, 2)
         val secondPosition = Position(2, 2)
-        subject.add(Passenger(id = 1, Route(firstPosition,Position(12,2))))
-        subject.add(Passenger(id = 2, Route(secondPosition,Position(12,2))))
+        subject.add(Passenger(Route(firstPosition,Position(12,2))))
+        subject.add(Passenger(Route(secondPosition,Position(12,2))))
 
         val firstResult = subject list firstPosition
         firstResult.isEmpty must beFalse
@@ -102,19 +102,19 @@ class MapsSpec extends Specification {
       "one passenger to another position" in {
         val subject = MapFixture.createPassengersMap
 
-        val passenger = Passenger(id = 1, Route(Position(0,0),Position(12,2)))
+        val passenger = Passenger(Route(Position(0,0),Position(12,2)))
         subject.add(passenger)
-        val addCabby = subject.list(passenger.currentPosition).find(_.equals(passenger))
-        addCabby.head must beEqualTo(passenger)
+        val addDriver = subject.list(passenger.currentPosition).find(_.equals(passenger))
+        addDriver.head must beEqualTo(passenger)
 
-        val updatableCabby = addCabby.head.copy(currentPosition = Position(2, 0))
-        subject.movePosition(addCabby.head, updatableCabby.currentPosition)
-        val updatedCabby = subject.list(updatableCabby.currentPosition).find(_.equals(passenger))
-        updatedCabby.isEmpty must beFalse
-        updatedCabby.head must beEqualTo(updatableCabby)
+        val updatableDriver = addDriver.head.copy(currentPosition = Position(2, 0))
+        subject.movePosition(addDriver.head, updatableDriver.currentPosition)
+        val updatedDriver = subject.list(updatableDriver.currentPosition).find(_.equals(passenger))
+        updatedDriver.isEmpty must beFalse
+        updatedDriver.head must beEqualTo(updatableDriver)
 
-        val removedCabby = subject.list(passenger.currentPosition).find(_.equals(passenger))
-        removedCabby.isEmpty must beTrue;
+        val removedDriver = subject.list(passenger.currentPosition).find(_.equals(passenger))
+        removedDriver.isEmpty must beTrue;
       }
     }
 

@@ -4,16 +4,16 @@ import model.{PriorityPosition, Route}
 
 import scala.collection.mutable.Set
 
-class Router(private val cabbiesMap: CabbiesMap) extends PriorityPositions {
+class Router(private val drivers: DriversMap) extends PriorityPositions {
 
-  override protected val roads: Array[Array[Boolean]] = cabbiesMap.roads
+  override protected val roads: Array[Array[Boolean]] = drivers.roads
 
   def evaluate(route: Route): Set[PriorityPosition] = {
     val currentPosition = prioritize(PriorityPosition(1, route.originPosition))
     val path = Set.empty[PriorityPosition]
 
     def search(priorityPosition: PriorityPosition): Set[PriorityPosition] = {
-      priorityPosition.neighbors(cabbiesMap unblocked)
+      priorityPosition.neighbors(drivers unblocked)
         .map(PriorityPosition(priorityPosition.score + 1, _))
         .filterNot(scoredPosition)
         .map(prioritize)
@@ -26,7 +26,7 @@ class Router(private val cabbiesMap: CabbiesMap) extends PriorityPositions {
     }
 
     def discoverRoute(priorityPosition: PriorityPosition): Set[PriorityPosition] = {
-      priorityPosition.neighbors(cabbiesMap unblocked)
+      priorityPosition.neighbors(drivers unblocked)
         .find(positionCloser(priorityPosition.score, _))
         .fold(ifEmpty = throw new RuntimeException("erroooooo"))(position => {
           val neighbor = PriorityPosition(priorityPosition.score - 1, position)

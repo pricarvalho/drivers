@@ -2,7 +2,7 @@ import java.io.FileNotFoundException
 
 import com.google.inject.AbstractModule
 import play.api.{Configuration, Environment}
-import services.{CabbiesMap, CabbiesRoadMap, PassengersMap, PassengersRoadMap}
+import services.{DriversMap, DriversRoadMap, PassengersMap, PassengersRoadMap}
 
 import scala.io.Source.fromInputStream
 
@@ -18,7 +18,7 @@ class GuiceModule(environment: Environment, configuration: Configuration) extend
   }
 
   override def configure() = {
-    bind(classOf[CabbiesMap]).toInstance(CabbiesRoadMap(roads))
+    bind(classOf[DriversMap]).toInstance(DriversRoadMap(roads))
     bind(classOf[PassengersMap]).toInstance(PassengersRoadMap(roads))
   }
 }

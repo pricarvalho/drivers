@@ -7,6 +7,6 @@ lazy val commonSettings = Seq(
 
 lazy val `cabby` = (project in file(".")).settings(commonSettings: _*).enablePlugins(PlayScala)
 
-unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )
+unmanagedResourceDirectories in Test <+=  (baseDirectory( _ /"target/web/public/test" ))
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"

@@ -21,11 +21,11 @@ class PassengersSpec extends Specification {
         status(post) must equalTo(CREATED)
       }
 
-      "'NotAcceptable' to invalid json request" in new WithApplication {
+      "'BadRequest' to invalid json request" in new WithApplication {
         val json = "{\n\t\"originPosition\" : {\n\t\t\"x\": 0,\n    \t\"y\": 0\n\t}\n}"
         val post = route(app, FakeRequest(POST, "/passengers").withJsonBody(Json.parse(json))).get
 
-        status(post) must equalTo(NOT_ACCEPTABLE)
+        status(post) must equalTo(BAD_REQUEST)
       }
 
       "'UnsupportedMediaType' to invalid request" in new WithApplication {

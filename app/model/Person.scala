@@ -13,14 +13,14 @@ object PersonWrites extends OWrites[Person] {
   def writes(person: Person) = Json.obj("uuid" -> person.uuid.toString)
 }
 
-case class Cabby(tagCar: String, currentPosition: Position, status: Int, uuid: UUID = UUID.randomUUID) extends Person {
+case class Driver(tagCar: String, currentPosition: Position, status: Int, uuid: UUID = UUID.randomUUID) extends Person {
 
   def empty = status == 1
   def onTheWay = status == 2
   def full = status == 3
 
   override def equals(obj: Any): Boolean = obj match {
-    case other: Cabby => this.tagCar.equals(other.tagCar) && this.uuid.equals(other.uuid)
+    case other: Driver => this.tagCar.equals(other.tagCar) && this.uuid.equals(other.uuid)
     case other: String => this.tagCar.equals(other)
     case other: UUID => this.uuid.equals(other)
     case _ => false
@@ -30,15 +30,15 @@ case class Cabby(tagCar: String, currentPosition: Position, status: Int, uuid: U
 
 }
 
-object Cabby {
+object Driver {
 
-  implicit val jsonFormat = new OFormat[Cabby] {
-    override def reads(json: JsValue): JsResult[Cabby] = Json.format[Cabby].reads(json)
-    override def writes(o: Cabby): JsObject = Json.format[Cabby].writes(o)++PersonWrites.writes(o)
+  implicit val jsonFormat = new OFormat[Driver] {
+    override def reads(json: JsValue): JsResult[Driver] = Json.format[Driver].reads(json)
+    override def writes(o: Driver): JsObject = Json.format[Driver].writes(o)++PersonWrites.writes(o)
   }
 
-  implicit def update(cabby: Cabby, newPosition: Position): Cabby = {
-    cabby.copy(currentPosition = newPosition)
+  implicit def update(driver: Driver, newPosition: Position): Driver = {
+    driver.copy(currentPosition = newPosition)
   }
 }
 

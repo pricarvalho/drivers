@@ -11,56 +11,50 @@ class RequestSpec extends Specification {
 
   "Request" should {
 
-    "move cabby" in {
+    "move driver" in {
       "in time 1 on the path" in {
-        val cabbies = MapFixture.createCabbiesRoadMap
-        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), status = 1)
-        cabbies.add(cabby)
+        val drivers = MapFixture.createDriversRoadMap
+        val driver = Driver(tagCar = "APRIL-2017", Position(10, 2), status = 1)
+        drivers.add(driver)
         val passengers = MapFixture.createPassengersMap
 
-        val passenger = Passenger(id = 1, Route(Position(0,0),Position(12,2)))
+        val passenger = Passenger(Route(Position(0,0),Position(12,2)))
 
-        val move = Move(cabby, passenger, Route(Position(10, 1), Position(0,0)))
-        val subject = new Request(cabbies, passengers)
+        val move = Move(driver, passenger, Route(Position(10, 1), Position(0,0)), time = 1)
+        val subject = new Request(drivers, passengers)
         val result = subject.to(move)
 
-        result.isEmpty must beFalse
-        result.get.path.size must beEqualTo(11)
-        result.get.status must beEqualTo(MoveStatus.ON_THE_WAY)
+        result.path.size must beEqualTo(11)
       }
 
       "in all time on the path" in {
-        val cabbies = MapFixture.createCabbiesRoadMap
-        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), status = 1)
-        cabbies.add(cabby)
+        val drivers = MapFixture.createDriversRoadMap
+        val driver = Driver(tagCar = "APRIL-2017", Position(10, 2), status = 1)
+        drivers.add(driver)
         val passengers = MapFixture.createPassengersMap
 
-        val passenger = Passenger(id = 1, Route(Position(0,0),Position(12,2)))
+        val passenger = Passenger(Route(Position(0,0),Position(12,2)))
 
-        val move = Move(cabby, passenger, Route(Position(10, 1), Position(0,0)), time = 12)
-        val subject = new Request(cabbies, passengers)
+        val move = Move(driver, passenger, Route(Position(10, 1), Position(0,0)), time = 12)
+        val subject = new Request(drivers, passengers)
         val result = subject.to(move)
 
-        result.isEmpty must beFalse
-        result.get.path.size must beEqualTo(1)
-        result.get.status must beEqualTo(MoveStatus.ARRIVED)
+        result.path.size must beEqualTo(1)
       }
 
       "in a greater time on the path" in {
-        val cabbies = MapFixture.createCabbiesRoadMap
-        val cabby = Cabby(tagCar = "APRIL-2017", Position(10, 2), status = 1)
-        cabbies.add(cabby)
+        val drivers = MapFixture.createDriversRoadMap
+        val driver = Driver(tagCar = "APRIL-2017", Position(10, 2), status = 1)
+        drivers.add(driver)
         val passengers = MapFixture.createPassengersMap
 
-        val passenger = Passenger(id = 1, Route(Position(0,0),Position(12,2)))
+        val passenger = Passenger(Route(Position(0,0),Position(12,2)))
 
-        val move = Move(cabby, passenger, Route(Position(10, 1), Position(0,0)), time = 100)
-        val subject = new Request(cabbies, passengers)
+        val move = Move(driver, passenger, Route(Position(10, 1), Position(0,0)), time = 100)
+        val subject = new Request(drivers, passengers)
         val result = subject.to(move)
 
-        result.isEmpty must beFalse
-        result.get.path.size must beEqualTo(1)
-        result.get.status must beEqualTo(MoveStatus.ARRIVED)
+        result.path.size must beEqualTo(1)
       }
     }
 
