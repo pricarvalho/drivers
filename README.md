@@ -1,6 +1,8 @@
 # Drivers
 Rest API that simulates a passenger call to driver
 
+For testing purposes, the POSTMAN's json file 'drivers.postman_collection' is available on the test folder.
+
 ## Add Driver
 
 * POST - https://drivers-99.herokuapp.com/drivers
