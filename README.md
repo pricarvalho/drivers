@@ -6,7 +6,8 @@ Rest API that simulates a passenger call to driver
 * POST - https://drivers-99.herokuapp.com/drivers
 
 ```json
-{ "tagCar" : "APRIL-2017",
+{
+  "tagCar" : "APRIL-2017",
   "currentPosition" : {
     "x": 10,
     "y": 2
